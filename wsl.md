@@ -174,7 +174,7 @@ sudo nano config.inc.php
 ```
 
 ```php
-$cfg['blowfish_secret'] = 'CHANGE_THIS_TO_A_RANDOM_32_CHAR_STRING';
+$cfg['blowfish_secret'] = 'oWUPyrWkeftLYPngBCM8iZILseVyx5eF';
 
 $i = 0;
 $i++;
