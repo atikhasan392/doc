@@ -12,6 +12,8 @@ The goal is not a "toy" setup, but a stack that mirrors real-world production cl
 wsl --install
 wsl --list --online
 wsl --install Ubuntu-24.04
+
+sudo passwd root
 ```
 
 After installation, restart Windows if prompted and complete the Ubuntu user setup.
