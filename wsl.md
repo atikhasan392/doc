@@ -199,16 +199,16 @@ sudo nano /etc/apache2/sites-available/000-default.conf
 <VirtualHost *:80>
     ServerName localhost
 
-    DocumentRoot /var/www/html/public
+    DocumentRoot /var/www/html
 
-    Alias /phpmyadmin /var/www/html/phpmyadmin
+    Alias /phpmyadmin /var/www/phpmyadmin
 
-    <Directory /var/www/html/public>
+    <Directory /var/www/html>
         AllowOverride All
         Require all granted
     </Directory>
 
-    <Directory /var/www/html/phpmyadmin>
+    <Directory /var/www/phpmyadmin>
         Options FollowSymLinks
         DirectoryIndex index.php
         AllowOverride All
