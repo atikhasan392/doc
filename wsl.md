@@ -152,7 +152,7 @@ sudo systemctl restart apache2
 ## 8. phpMyAdmin (Manual, PHP 8.4 Safe)
 
 ```bash
-cd /var/www/html
+cd /var/www
 sudo wget https://files.phpmyadmin.net/phpMyAdmin/5.2.3/phpMyAdmin-5.2.3-all-languages.tar.gz
 sudo tar xzf phpMyAdmin-5.2.3-all-languages.tar.gz
 sudo mv phpMyAdmin-5.2.3-all-languages phpmyadmin
@@ -160,15 +160,15 @@ sudo rm phpMyAdmin-5.2.3-all-languages.tar.gz
 ```
 
 ```bash
-sudo mkdir -p /var/www/html/phpmyadmin/tmp
+sudo mkdir -p /var/www/phpmyadmin/tmp
 sudo chown -R www-data:www-data /var/www/html/phpmyadmin
-sudo chmod 777 /var/www/html/phpmyadmin/tmp
+sudo chmod 777 /var/www/phpmyadmin/tmp
 ```
 
 ### phpMyAdmin Configuration
 
 ```bash
-cd /var/www/html/phpmyadmin
+cd /var/www/phpmyadmin
 sudo cp config.sample.inc.php config.inc.php
 sudo nano config.inc.php
 ```
@@ -184,7 +184,7 @@ $cfg['Servers'][$i]['user'] = 'root';
 $cfg['Servers'][$i]['password'] = '';
 $cfg['Servers'][$i]['AllowNoPassword'] = true;
 
-$cfg['TempDir'] = '/var/www/html/phpmyadmin/tmp';
+$cfg['TempDir'] = '/var/www/phpmyadmin/tmp';
 ```
 
 ---
