@@ -1,102 +1,109 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-YES=1
+DRY_RUN=0
+YES=0
 
-LOG_DIR="/var/log/ubuntu-debloat"
-LOG_FILE="$LOG_DIR/debloat-$(date +%F-%H%M%S).log"
+for arg in "$@"; do
+  case "$arg" in
+    --dry-run) DRY_RUN=1 ;;
+    -y|--yes) YES=1 ;;
+    *) ;;
+  esac
+done
 
-need_root() {
-  if [[ "${EUID}" -ne 0 ]]; then
-    echo "Run as root"
-    exit 1
+run() {
+  if [ "$DRY_RUN" -eq 1 ]; then
+    echo "[dry-run] $*"
+  else
+    eval "$@"
   fi
 }
 
-log_setup() {
-  mkdir -p "$LOG_DIR"
-  touch "$LOG_FILE"
-  exec > >(tee -a "$LOG_FILE") 2>&1
+is_installed_apt() {
+  dpkg -s "$1" >/dev/null 2>&1
 }
 
-clear_stale_locks() {
-  if pgrep -x dpkg >/dev/null 2>&1 || pgrep -x apt >/dev/null 2>&1; then
-    return 0
+is_installed_snap() {
+  command -v snap >/dev/null 2>&1 || return 1
+  snap list "$1" >/dev/null 2>&1
+}
+
+echo "Ubuntu cleanup (conservative)"
+echo "Dry-run: $DRY_RUN | Auto-yes: $YES"
+echo
+
+if [ "$YES" -ne 1 ] && [ "$DRY_RUN" -ne 1 ]; then
+  echo "This will remove selected apps. Continue? (y/N)"
+  read -r ans
+  if [[ "${ans:-N}" != "y" && "${ans:-N}" != "Y" ]]; then
+    echo "Aborted."
+    exit 0
   fi
-  rm -f /var/lib/dpkg/lock-frontend
-  rm -f /var/lib/dpkg/lock
-  rm -f /var/cache/apt/archives/lock
-  rm -f /var/lib/apt/lists/lock
-  dpkg --configure -a || true
-}
+fi
 
-apt_purge() {
-  apt-get purge -y "$@" || true
-}
+APT_REMOVE=()
+SNAP_REMOVE=()
 
-main() {
-  need_root
-  log_setup
+# Clocks
+APT_REMOVE+=(gnome-clocks)
 
-  apt-get update -y
+# Characters
+APT_REMOVE+=(gnome-characters)
 
-  # Core bloat
-  apt_purge     aisleriot gnome-mahjongg gnome-mines gnome-sudoku     cheese rhythmbox totem shotwell simple-scan     thunderbird transmission-gtk remmina     gnome-contacts gnome-weather gnome-maps     gnome-clocks gnome-calendar yelp gnome-tour     ubuntu-docs gnome-user-docs deja-dup     whoopsie apport popularity-contest modemmanager
+# Help / Docs
+APT_REMOVE+=(yelp gnome-user-docs ubuntu-docs gnome-getting-started-docs)
 
-  # Office
-  apt-get purge -y 'libreoffice*' || true
+# Document viewer
+APT_REMOVE+=(evince)
 
-  # Document viewers
-  apt_purge evince evince-common atril xreader okular poppler-utils
+# App Center / Software (varies by Ubuntu release)
+APT_REMOVE+=(ubuntu-software gnome-software)
+SNAP_REMOVE+=(snap-store)
 
-  # Image viewers
-  apt_purge eog eog-plugins gthumb ristretto imagemagick
+# LibreOffice
+APT_REMOVE+=(libreoffice*)
 
-  # Language support and input methods
-  apt-get purge -y     language-selector-common     language-selector-gnome     ibus ibus-gtk ibus-gtk3 ibus-table     fcitx fcitx-frontend-gtk2 fcitx-frontend-gtk3     fcitx-module-dbus fcitx-module-kimpanel || true
+# Firefox (snap or apt transitional)
+APT_REMOVE+=(firefox)
+SNAP_REMOVE+=(firefox)
 
-  apt-get purge -y 'language-pack-*' 'language-pack-gnome-*' 'myspell-*' 'hunspell-*' || true
+echo "Updating package lists..."
+run "sudo apt-get update -y"
 
-  # Characters (GNOME Characters)
-  apt_purge gnome-characters
-
-  # Passwords and Keys
-  apt_purge seahorse gnome-keyring gnome-keyring-pkcs11 gnome-keyring-secrets
-
-  # Snap
-  if command -v snap >/dev/null 2>&1; then
-    snap list | awk 'NR>1 {print $1}' | while read -r s; do
-      snap remove --purge "$s" || true
-    done
+echo
+echo "Purging selected APT packages (only if installed)..."
+TO_PURGE=()
+for pkg in "${APT_REMOVE[@]}"; do
+  if [[ "$pkg" == *"*"* ]]; then
+    TO_PURGE+=("$pkg")
+  else
+    if is_installed_apt "$pkg"; then
+      TO_PURGE+=("$pkg")
+    fi
   fi
-  apt-get purge -y snapd || true
-  rm -rf /snap /var/snap /var/lib/snapd /home/*/snap || true
+done
 
-  # Flatpak and software center
-  apt-get purge -y flatpak gnome-software packagekit || true
-  rm -rf /var/lib/flatpak || true
+if [ "${#TO_PURGE[@]}" -gt 0 ]; then
+  run "sudo apt-get purge -y ${TO_PURGE[*]}"
+fi
 
-  # Tracker
-  systemctl --user mask tracker-miner-fs-3.service tracker-extract-3.service tracker-miner-rss-3.service 2>/dev/null || true
-  tracker3 reset --hard 2>/dev/null || true
+echo
+echo "Removing selected Snap packages (only if installed)..."
+for spkg in "${SNAP_REMOVE[@]}"; do
+  if is_installed_snap "$spkg"; then
+    run "sudo snap remove --purge $spkg"
+  fi
+done
 
-  # Cleanup
-  rm -rf /var/cache/apt/archives/* || true
-  rm -rf /var/lib/apt/lists/* || true
-  mkdir -p /var/lib/apt/lists/partial
+echo
+echo "Autoremoving unused dependencies..."
+run "sudo apt-get autoremove --purge -y"
 
-  journalctl --vacuum-time=7d || true
+echo
+echo "Cleaning apt cache..."
+run "sudo apt-get clean"
 
-  rm -rf /tmp/* /var/tmp/* || true
-  rm -rf /home/*/.cache/* || true
-
-  apt-get autoremove --purge -y || true
-  apt-get autoclean -y || true
-  apt-get clean -y || true
-
-  clear_stale_locks
-
-  echo "DONE. REBOOT RECOMMENDED."
-}
-
-main
+echo
+echo "Done."
+echo "Tip: reboot recommended."
