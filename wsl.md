@@ -70,6 +70,18 @@ php8.4-mysqli php8.4-redis
 php -m | grep -E "bcmath|ctype|curl|dom|fileinfo|gd|json|mbstring|openssl|pdo|pdo_mysql|pdo_sqlite|session|tokenizer|xml|zip|mysqli"
 ```
 
+### Install PHP CLI
+
+```bash
+sudo apt install php8.4-intl
+```
+
+```bash
+php -v
+php --ini
+php -m | grep -i intl
+```
+
 ---
 
 ## 3. Composer (System-wide)
