@@ -29,19 +29,6 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install -y software-properties-common ca-certificates curl gnupg lsb-release unzip
 ```
 
-### Neofetch (Optional)
-
-```bash
-sudo apt install -y neofetch
-nano ~/.bashrc
-```
-
-Add at the end of the file:
-
-```bash
-neofetch
-```
-
 ---
 
 ## 2. PHP 8.4 Installation (Ondrej PPA)
