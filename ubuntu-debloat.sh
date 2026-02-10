@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "=== Ubuntu Safe Debloat Started ==="
+export DEBIAN_FRONTEND=noninteractive
+
+echo "=== Ubuntu Safe Debloat (Auto-Yes) ==="
+
+# Ensure sudo session (will ask password once if needed)
+sudo -v
 
 echo
-echo "Removing safe preinstalled apps..."
+echo "Step 1) Purging safe preinstalled apps (NOT removing Text Editor / Fonts / Image Viewer)..."
+
+sudo apt-get update -y
 
 sudo apt-get purge -y \
   gnome-clocks \
@@ -22,49 +29,48 @@ sudo apt-get purge -y \
   ubuntu-docs \
   gnome-user-docs \
   gnome-getting-started-docs \
-  libreoffice*
+  libreoffice* || true
 
 echo
-echo "Removing unused dependencies..."
+echo "Step 2) Removing unused dependencies..."
 sudo apt-get autoremove --purge -y
 
 echo
-echo "Cleaning apt cache..."
+echo "Step 3) Cleaning apt cache..."
 sudo apt-get clean
 
 echo
-echo "Cleaning systemd journal logs..."
-sudo journalctl --vacuum-time=7d
+echo "Step 4) Cleaning system logs (journalctl: keep last 7 days)..."
+sudo journalctl --vacuum-time=7d || true
 
 echo
-echo "Cleaning old crash reports..."
-sudo rm -rf /var/crash/*
+echo "Step 5) Cleaning old crash reports..."
+sudo rm -rf /var/crash/* || true
 
 echo
-echo "Cleaning thumbnail cache..."
-rm -rf ~/.cache/thumbnails/*
+echo "Step 6) Cleaning thumbnail cache..."
+rm -rf "$HOME/.cache/thumbnails/"* 2>/dev/null || true
 
 echo
-echo "Cleaning user cache (safe)..."
-rm -rf ~/.cache/fontconfig/*
-rm -rf ~/.cache/mozilla/firefox/*/cache2 2>/dev/null || true
-rm -rf ~/.cache/google-chrome 2>/dev/null || true
-rm -rf ~/.cache/chromium 2>/dev/null || true
+echo "Step 7) Cleaning safe user caches..."
+rm -rf "$HOME/.cache/fontconfig/"* 2>/dev/null || true
+rm -rf "$HOME/.cache/mozilla/firefox/"*/cache2 2>/dev/null || true
+rm -rf "$HOME/.cache/google-chrome" 2>/dev/null || true
+rm -rf "$HOME/.cache/chromium" 2>/dev/null || true
 
 echo
-echo "Removing orphan config directories (safe)..."
-rm -rf ~/.local/share/Trash/*
-rm -rf ~/.local/share/recently-used.xbel
+echo "Step 8) Cleaning trash & recent files list..."
+rm -rf "$HOME/.local/share/Trash/"* 2>/dev/null || true
+rm -f "$HOME/.local/share/recently-used.xbel" 2>/dev/null || true
 
 echo
-echo "Disabling apport (crash reporting)..."
+echo "Step 9) Disabling apport (crash reporting service)..."
 sudo systemctl disable apport.service >/dev/null 2>&1 || true
-sudo sed -i 's/enabled=1/enabled=0/' /etc/default/apport || true
+sudo sed -i 's/enabled=1/enabled=0/' /etc/default/apport 2>/dev/null || true
 
 echo
 echo "Syncing filesystem..."
 sync
 
 echo
-echo "=== Ubuntu Safe Debloat Completed ==="
-echo "Reboot recommended."
+echo "=== Done. Reboot recommended. ==="
