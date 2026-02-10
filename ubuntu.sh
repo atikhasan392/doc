@@ -14,11 +14,6 @@ if [[ $EUID -eq 0 ]]; then
   exit 1
 fi
 
-if ! command -v sudo >/dev/null 2>&1; then
-  echo "sudo not found. Install sudo first."
-  exit 1
-fi
-
 sudo -v
 
 print_step() {
@@ -75,7 +70,6 @@ if [[ ! -d "$HOME/.nvm" ]]; then
 fi
 
 export NVM_DIR="$HOME/.nvm"
-# shellcheck disable=SC1091
 [[ -s "$NVM_DIR/nvm.sh" ]] && . "$NVM_DIR/nvm.sh"
 
 nvm install "${NODE_VERSION}"
@@ -86,21 +80,17 @@ print_step "4) Bun"
 if ! command_exists bun; then
   curl -fsSL https://bun.sh/install | bash
 fi
-# shellcheck disable=SC1091
 [[ -s "$HOME/.bashrc" ]] && . "$HOME/.bashrc" || true
-# shellcheck disable=SC1091
 [[ -s "$HOME/.zshrc" ]] && . "$HOME/.zshrc" || true
 
-print_step "5) MySQL 8 (safe local setup: dev user, keep root default)"
+print_step "5) MySQL 8 (dev-only root empty password like your config)"
 apt_install mysql-server
 sudo systemctl enable --now mysql
 
-MYSQL_DEV_USER="laravel"
-MYSQL_DEV_PASS="laravel"
-
-sudo mysql -e "CREATE USER IF NOT EXISTS '${MYSQL_DEV_USER}'@'localhost' IDENTIFIED BY '${MYSQL_DEV_PASS}';"
-sudo mysql -e "GRANT ALL PRIVILEGES ON *.* TO '${MYSQL_DEV_USER}'@'localhost' WITH GRANT OPTION;"
-sudo mysql -e "FLUSH PRIVILEGES;"
+sudo mysql <<'SQL'
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '';
+FLUSH PRIVILEGES;
+SQL
 
 print_step "6) Apache2 + PHP module + rewrite"
 apt_install apache2 libapache2-mod-php8.4
@@ -108,7 +98,7 @@ sudo a2enmod rewrite
 sudo systemctl enable --now apache2
 sudo systemctl restart apache2
 
-print_step "7) phpMyAdmin (manual install to /var/www/phpmyadmin) + Apache alias"
+print_step "7) phpMyAdmin (manual install) + your exact config + Apache vhost"
 sudo mkdir -p /var/www
 cd /tmp
 wget -q "https://files.phpmyadmin.net/phpMyAdmin/${PMA_VERSION}/phpMyAdmin-${PMA_VERSION}-all-languages.tar.gz"
@@ -119,25 +109,50 @@ rm -f "phpMyAdmin-${PMA_VERSION}-all-languages.tar.gz"
 
 sudo mkdir -p /var/www/phpmyadmin/tmp
 sudo chown -R www-data:www-data /var/www/phpmyadmin
-sudo chmod 770 /var/www/phpmyadmin/tmp
+sudo chmod 777 /var/www/phpmyadmin/tmp
 
-sudo cp /var/www/phpmyadmin/config.sample.inc.php /var/www/phpmyadmin/config.inc.php
+cd /var/www/phpmyadmin
+sudo cp config.sample.inc.php config.inc.php
 
-BLOWFISH_SECRET="$(tr -dc 'A-Za-z0-9' </dev/urandom | head -c 32)"
-sudo sed -i "s/\\\$cfg\\['blowfish_secret'\\] = '';/\\\$cfg\\['blowfish_secret'\\] = '${BLOWFISH_SECRET}';/" /var/www/phpmyadmin/config.inc.php
+sudo bash -lc "cat >/var/www/phpmyadmin/config.inc.php <<'PHP'
+<?php
+declare(strict_types=1);
 
-sudo bash -lc "cat >/etc/apache2/conf-available/phpmyadmin.conf <<'EOF'
-Alias /phpmyadmin /var/www/phpmyadmin
+\$cfg['blowfish_secret'] = 'oWUPyrWkeftLYPngBCM8iZILseVyx5eF';
 
-<Directory /var/www/phpmyadmin>
-    Options FollowSymLinks
-    DirectoryIndex index.php
-    AllowOverride All
-    Require all granted
-</Directory>
-EOF"
+\$i = 0;
+\$i++;
+\$cfg['Servers'][\$i]['auth_type'] = 'config';
+\$cfg['Servers'][\$i]['host'] = '127.0.0.1';
+\$cfg['Servers'][\$i]['user'] = 'root';
+\$cfg['Servers'][\$i]['password'] = '';
+\$cfg['Servers'][\$i]['AllowNoPassword'] = true;
 
-sudo a2enconf phpmyadmin
+\$cfg['TempDir'] = '/var/www/phpmyadmin/tmp';
+PHP"
+
+sudo bash -lc "cat >/etc/apache2/sites-available/000-default.conf <<'APACHE'
+<VirtualHost *:80>
+    ServerName localhost
+
+    DocumentRoot /var/www/html
+
+    Alias /phpmyadmin /var/www/phpmyadmin
+
+    <Directory /var/www/html>
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    <Directory /var/www/phpmyadmin>
+        Options FollowSymLinks
+        DirectoryIndex index.php
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+APACHE"
+
 sudo systemctl reload apache2
 
 print_step "8) Git (latest via PPA) + GitHub CLI"
@@ -156,7 +171,7 @@ print_step "10) Cleanup"
 sudo apt -y autoremove
 sudo apt -y autoclean
 
-print_step "11) Versions (table)"
+print_step "11) Versions (professional table)"
 php_ver="$(php -v 2>/dev/null | head -n 1 || true)"
 composer_ver="$(composer -V 2>/dev/null || true)"
 node_ver="$(node -v 2>/dev/null || true)"
@@ -169,21 +184,44 @@ gh_ver="$(gh --version 2>/dev/null | head -n 1 || true)"
 redis_ver="$(redis-cli --version 2>/dev/null || true)"
 pma_ver="phpMyAdmin ${PMA_VERSION}"
 
-printf "\n%-18s | %s\n" "Component" "Version"
-printf "%-18s-+-%s\n" "------------------" "----------------------------------------------"
-printf "%-18s | %s\n" "PHP" "$php_ver"
-printf "%-18s | %s\n" "Composer" "$composer_ver"
-printf "%-18s | %s\n" "Node" "$node_ver"
-printf "%-18s | %s\n" "npm" "$npm_ver"
-printf "%-18s | %s\n" "Bun" "$bun_ver"
-printf "%-18s | %s\n" "MySQL" "$mysql_ver"
-printf "%-18s | %s\n" "Apache" "$apache_ver"
-printf "%-18s | %s\n" "phpMyAdmin" "$pma_ver"
-printf "%-18s | %s\n" "Git" "$git_ver"
-printf "%-18s | %s\n" "GitHub CLI" "$gh_ver"
-printf "%-18s | %s\n" "Redis" "$redis_ver"
+rows=(
+"PHP|${php_ver}"
+"Composer|${composer_ver}"
+"Node|${node_ver}"
+"npm|${npm_ver}"
+"Bun|${bun_ver}"
+"MySQL|${mysql_ver}"
+"Apache|${apache_ver}"
+"phpMyAdmin|${pma_ver}"
+"Git|${git_ver}"
+"GitHub CLI|${gh_ver}"
+"Redis|${redis_ver}"
+)
 
-echo
+maxk=0
+maxv=0
+for r in "${rows[@]}"; do
+  k="${r%%|*}"
+  v="${r#*|}"
+  (( ${#k} > maxk )) && maxk=${#k}
+  (( ${#v} > maxv )) && maxv=${#v}
+done
+
+line="+"
+for ((i=0;i<maxk+2;i++)); do line="${line}-"; done
+line="${line}+"
+for ((i=0;i<maxv+2;i++)); do line="${line}-"; done
+line="${line}+"
+
+printf "\n%s\n" "$line"
+printf "| %-${maxk}s | %-${maxv}s |\n" "Component" "Version"
+printf "%s\n" "$line"
+for r in "${rows[@]}"; do
+  k="${r%%|*}"
+  v="${r#*|}"
+  printf "| %-${maxk}s | %-${maxv}s |\n" "$k" "$v"
+done
+printf "%s\n\n" "$line"
+
 echo "phpMyAdmin: http://localhost/phpmyadmin"
-echo "MySQL dev user: ${MYSQL_DEV_USER} / ${MYSQL_DEV_PASS}"
 echo "Log saved to: ${LOG_FILE}"
