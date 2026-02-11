@@ -1,9 +1,3 @@
-sudo apt purge -y gnome-clocks gnome-calculator baobab gnome-logs gnome-characters evince yelp && sudo apt remove -y gnome-software language-selector-gnome firefox && sudo snap remove firefox 2>/dev/null || true && sudo apt autoremove -y && sudo apt autoclean
+sudo apt purge -y gnome-clocks gnome-calculator baobab gnome-logs gnome-characters evince yelp && sudo apt autoremove --purge -y && sudo apt autoclean
 
 sudo apt install diodon
-
-
-
-sudo apt purge -y baobab gnome-disk-utility evince gnome-characters gnome-logs gnome-clocks language-selector-gnome yelp snap-store gnome-software && sudo apt autoremove -y
-
-sudo snap remove snap-store
