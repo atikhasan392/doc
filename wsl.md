@@ -160,7 +160,7 @@ sudo rm phpMyAdmin-5.2.3-all-languages.tar.gz
 
 ```bash
 sudo mkdir -p /var/www/phpmyadmin/tmp
-sudo chown -R www-data:www-data /var/www/html/phpmyadmin
+sudo chown -R www-data:www-data /var/www/phpmyadmin
 sudo chmod 777 /var/www/phpmyadmin/tmp
 ```
 
