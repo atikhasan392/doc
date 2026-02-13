@@ -42,6 +42,10 @@ sudo apt update
 sudo apt install -y php8.4
 ```
 
+```bash
+ora@Node:/etc/php/8.4/cli$
+```
+
 ### Required PHP Extensions (Laravel-Ready)
 
 ```bash
