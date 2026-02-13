@@ -43,7 +43,8 @@ sudo apt install -y php8.4
 ```
 
 ```bash
-ora@Node:/etc/php/8.4/cli$
+ora@Node:/etc/php/8.4/cli
+sudo nano php.nin
 ```
 
 ### Required PHP Extensions (Laravel-Ready)
