@@ -17,8 +17,6 @@
 - [Visual Studio Code](https://code.visualstudio.com/)
 - [Notepad++](https://notepad-plus-plus.org/)
 - [Node.js](https://nodejs.org/en)
-- [Docker](https://www.docker.com/)
-- [XAMPP](https://www.apachefriends.org/)
 - [PHP](https://www.php.net/)
 - [Composer](https://getcomposer.org/)
 - [Postman](https://www.postman.com/downloads/)
@@ -29,7 +27,6 @@
 ## 🖌️ Design and Video Tools
 - [Canva (Windows App)](https://www.canva.com/download/windows/)
 - [CapCut](https://www.capcut.com/)
-- [Figma](https://www.figma.com/downloads/)
 
 ## 📦 Archive and System Utilities
 - [WinRAR](https://www.win-rar.com/)
