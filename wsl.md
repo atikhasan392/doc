@@ -26,6 +26,7 @@ Update Ubuntu and install required base packages.
 
 ```bash
 sudo apt update && sudo apt upgrade -y
+sudo apt install libatomic1 -y
 sudo apt install -y software-properties-common ca-certificates curl gnupg lsb-release unzip
 ```
 
