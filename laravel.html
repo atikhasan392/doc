@@ -62,6 +62,9 @@
 		<code>Route::get('/symlink', function() { <br> &nbsp; &nbsp; $targetDir = storage_path('app/public'); <br> &nbsp; &nbsp; $linkDir   = $_SERVER['DOCUMENT_ROOT'] . '/storage'; <br> &nbsp; &nbsp; symlink($targetDir, $linkDir); <br> });</code>
 		<p>Remove TXT file data to clear PowerShell history</p>
         <code>C:\Users\Core\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt</code>
+		<p>Remove WSL or Ubuntu terminal history</p>
+		<code>history -c && history -w</code>
     </div>
 </body>
 </html>
+
