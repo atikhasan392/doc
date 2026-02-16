@@ -280,16 +280,26 @@ redis-cli --version
 
 ---
 
-## 13. Auto Terminal history clear
+## 13. Auto Terminal History Clear (Ubuntu 24.04 + Bash)
 
 ```bash
+# Disable bash history (Ubuntu 24.04)
+unset HISTFILE
 export HISTSIZE=0
 export HISTFILESIZE=0
-export HISTFILE=/dev/null
+export HISTCONTROL=ignorespace
+set +o history
+
+history -c
+history -w
+rm -f ~/.bash_history
+
+trap 'history -c; history -w; rm -f ~/.bash_history' EXIT
 ```
 
 ```bash
 source ~/.bashrc
+exec bash
 ```
 
 ## Final Notes
