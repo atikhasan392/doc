@@ -280,6 +280,18 @@ redis-cli --version
 
 ---
 
+## 13. Auto Terminal history clear
+
+```bash
+export HISTSIZE=0
+export HISTFILESIZE=0
+export HISTFILE=/dev/null
+```
+
+```bash
+source ~/.bashrc
+```
+
 ## Final Notes
 
 - phpMyAdmin runs through Apache, not PHP’s built-in server
