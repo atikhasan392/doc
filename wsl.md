@@ -142,6 +142,18 @@ FLUSH PRIVILEGES;
 EXIT;
 ```
 
+```bash
+sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+```
+
+```ini
+max_allowed_packet = 512M
+```
+
+```bash
+sudo systemctl restart mysql
+```
+
 ---
 
 ## 7. Apache 2 Installation
