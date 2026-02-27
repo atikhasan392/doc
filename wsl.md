@@ -290,6 +290,30 @@ git -v
 redis-cli --version
 ```
 
+## 13.
+
+```bash
+nano ~/.bashrc
+```
+
+Insert these lines below:
+```.bashrc
+export HISTSIZE=10000
+export HISTFILESIZE=0
+export HISTFILE=~/.bash_history
+shopt -s histappend
+PROMPT_COMMAND="history -a"
+
+trap 'history -c; rm -f ~/.bash_history' EXIT
+```
+
+Save and exit
+*Then: Run*
+```bash
+exec bash
+```
+
+
 ## Final Notes
 
 - phpMyAdmin runs through Apache, not PHP’s built-in server
