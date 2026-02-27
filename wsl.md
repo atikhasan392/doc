@@ -290,7 +290,7 @@ git -v
 redis-cli --version
 ```
 
-## 13.
+## 13. Terminal history auto remove
 
 ```bash
 nano ~/.bashrc
