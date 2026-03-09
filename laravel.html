@@ -36,17 +36,15 @@
 	<div class="box">
         <h3>Livewire 4 installation and setup</h3>
 		<p>Livewire installation and setup</p>
-        <code>composer require livewire/livewire<br> php artisan livewire:config <br> php artisan livewire:layout <br> php artisan make:livewire pages::index <br> php artisan make:livewire ui.card</code>
+        <code>composer require livewire/livewire<br> php artisan livewire:config <br> php artisan livewire:layout <br> php artisan make:livewire pages::index <br> php artisan make:livewire partials.header</code>
 		<p>Essentials</p>
-		<code>&lt;livewire:partials.header /&gt; <br> &lt;livewire:pages::index /&gt; <br>Route::livewire('/', 'pages::index');</code>
+		<code>&lt;livewire:partials.header /&gt; <br> &lt;livewire:pages::index /&gt; <br>Route::livewire('/', 'pages::index')->name('index');</code>
     </div>
 
 	<div class="box">
         <h3>FilamentPHP 5 installation and setup</h3>
 		<p>Livewire installation and setup</p>
-        <code>composer require filament/filament:"^5.0" <br> php artisan filament:install --panels <br><br> php artisan make:filament-user <br> php artisan vendor:publish --tag=filament-config <br> php artisan make:livewire pages::index <br> php artisan make:livewire ui.card</code>
-		<p>Essentials</p>
-		<code>&lt;livewire:partials.header /&gt; <br> &lt;livewire:pages::index /&gt; <br>Route::livewire('/', 'pages::index')->name('index');</code>
+        <code>composer require filament/filament:"^5.0" <br> php artisan filament:install --panels <br><br> php artisan make:filament-user <br> php artisan vendor:publish --tag=filament-config</code>
     </div>
 
 	<div class="box">
@@ -69,4 +67,3 @@
     </div>
 </body>
 </html>
-
