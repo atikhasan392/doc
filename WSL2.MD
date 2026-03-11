@@ -24,7 +24,7 @@ wsl --install -d Ubuntu-24.04
 
 ```bash
 sudo apt update && sudo apt upgrade -y
-sudo apt install -y software-properties-common ca-certificates curl gnupg lsb-release unzip
+sudo apt install -y software-properties-common ca-certificates curl gnupg lsb-release unzip htop
 ```
 
 ## 3. Install PHP 8.5 & Required Extensions
@@ -130,3 +130,4 @@ source ~/.profile
 # Verify install:
 laravel --version
 ```
+
