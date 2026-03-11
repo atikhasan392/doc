@@ -37,16 +37,16 @@ sudo apt update
 Install PHP:
 
 ```bash
-sudo apt install -y php8.5 php8.5-cli
+sudo apt install -y php8.4 php8.4-cli
 ```
 
 Install required extensions:
 
 ```bash
 sudo apt install -y \
-  php8.5-bcmath php8.5-curl php8.5-dom php8.5-gd \
-  php8.5-mbstring php8.5-mysql php8.5-xml php8.5-zip \
-  php8.5-intl php8.5-redis
+  php8.4-bcmath php8.4-curl php8.4-dom php8.4-gd \
+  php8.4-mbstring php8.4-mysql php8.4-xml php8.4-zip \
+  php8.4-intl php8.4-redis
 ```
 
 Verify extensions:
