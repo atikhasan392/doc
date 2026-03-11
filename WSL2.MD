@@ -137,7 +137,7 @@ sudo systemctl restart mysql
 Test connection:
 
 ```bash
-mysql -u root
+sudo mysql -u root
 ```
 
 ---
@@ -168,3 +168,4 @@ source ~/.bashrc
 
 laravel
 ```
+
