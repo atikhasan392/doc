@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # Laravel Development Environment Installer
+# install (curl -s https://raw.githubusercontent.com/atikhasan392/doc/laravel_env_installer.sh | bash)
 #
 # This script automates the installation of a PHP/Laravel development environment on Ubuntu
 # 22.04, 24.04, and WSL2. It installs PHP (with extensions), Composer, Node.js, MySQL 8.4,
