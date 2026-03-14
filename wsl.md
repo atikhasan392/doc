@@ -256,6 +256,7 @@ redis-cli ping
 ```bash
 php -v
 composer -V
+laravel -V
 node -v
 npm -v
 bun -v
