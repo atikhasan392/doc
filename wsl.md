@@ -118,7 +118,9 @@ sudo mysql
 Inside MySQL:
 
 ```sql
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '';
+ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY '';
+CREATE USER IF NOT EXISTS 'root'@'127.0.0.1' IDENTIFIED WITH caching_sha2_password BY '';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'127.0.0.1' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 EXIT;
 ```
@@ -126,7 +128,7 @@ EXIT;
 Optional packet size increase:
 
 ```ini
-# /etc/mysql/mysql.conf.d/mysqld.cnf
+# sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
 max_allowed_packet = 512M
 ```
 
@@ -264,9 +266,3 @@ mysql --version
 git -v
 redis-cli --version
 ```
-
----
-
-### ✅ Environment Ready
-
-Your Laravel 12 full-stack development environment is now ready on WSL2 with Ubuntu 24.04.
