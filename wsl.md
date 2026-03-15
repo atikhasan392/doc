@@ -179,7 +179,7 @@ Edit `config.inc.php` as needed.
 Edit:
 
 ```
-/etc/apache2/sites-available/000-default.conf
+sudo nano /etc/apache2/sites-available/000-default.conf
 ```
 
 Configuration:
