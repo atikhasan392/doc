@@ -231,6 +231,8 @@ git config --global user.email "atikhasan2700@gmail.com"
 Authenticate GitHub CLI:
 
 ```bash
+sudo apt update
+sudo apt install gh
 gh auth login
 ```
 
