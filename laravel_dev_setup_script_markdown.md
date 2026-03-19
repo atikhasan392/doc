@@ -275,9 +275,9 @@ Paste:
 ```php
 <?php
 $cfg['Servers'][1]['auth_type'] = 'config';
-$cfg['Servers'][1]['user'] = 'your_user';
-$cfg['Servers'][1]['password'] = 'your_password';
-$cfg['Servers'][1]['AllowNoPassword'] = false;
+$cfg['Servers'][1]['user'] = 'root';
+$cfg['Servers'][1]['password'] = '';
+$cfg['Servers'][1]['AllowNoPassword'] = true;
 ```
 
 ---
