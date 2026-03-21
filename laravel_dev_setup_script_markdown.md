@@ -12,7 +12,7 @@ Each step is broken down with **clear explanations** so you understand what is h
 
 This setup installs:
 
-- PHP 8.5 (FPM-based)
+- PHP 8.4 (FPM-based)
 - Composer + Laravel installer
 - MySQL 8.4 (secure local config)
 - Redis (latest official repo)
