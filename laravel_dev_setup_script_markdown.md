@@ -32,6 +32,16 @@ This setup installs:
 
 ---
 
+# 0️⃣. Enable WSL2 & Install Ubuntu 24.04
+
+### Why?
+
+```bash
+wsl --install
+wsl --list --online
+wsl --install -d Ubuntu-24.04
+```
+
 # 1️⃣ System Update & Base Packages
 
 ### Why?
@@ -51,7 +61,7 @@ sudo apt install -y \
 
 ---
 
-# 2️⃣ Install PHP 8.5 (Ondřej PPA)
+# 2️⃣ Install PHP 8.4 (Ondřej PPA)
 
 ### Why?
 
@@ -66,18 +76,18 @@ sudo apt update
 
 ```bash
 sudo apt install -y \
-  php8.5 php8.5-fpm php8.5-cli \
-  php8.5-bcmath php8.5-curl php8.5-dom php8.5-gd \
-  php8.5-mbstring php8.5-mysql php8.5-xml php8.5-zip \
-  php8.5-intl php8.5-readline php8.5-redis \
-  php8.5-msgpack php8.5-igbinary php8.5-sqlite3 \
-  php8.5-pgsql php8.5-sqlsrv
+  php8.4 php8.4-fpm php8.4-cli \
+  php8.4-bcmath php8.4-curl php8.4-dom php8.4-gd \
+  php8.4-mbstring php8.4-mysql php8.4-xml php8.4-zip \
+  php8.4-intl php8.4-readline php8.4-redis \
+  php8.4-msgpack php8.4-igbinary php8.4-sqlite3 \
+  php8.4-pgsql php8.4-sqlsrv
 ```
 
 ### Enable PHP-FPM
 
 ```bash
-sudo systemctl enable --now php8.5-fpm
+sudo systemctl enable --now php8.4-fpm
 ```
 
 ---
@@ -189,8 +199,7 @@ sudo mysql
 ```
 
 ```sql
-CREATE USER 'your_user'@'localhost' IDENTIFIED BY 'your_password';
-GRANT ALL PRIVILEGES ON *.* TO 'your_user'@'localhost' WITH GRANT OPTION;
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '';
 FLUSH PRIVILEGES;
 EXIT;
 ```
@@ -247,7 +256,7 @@ sudo apt install -y apache2
 
 ```bash
 sudo a2enmod rewrite proxy_fcgi setenvif headers
-sudo a2enconf php8.5-fpm
+sudo a2enconf php8.4-fpm
 sudo systemctl restart apache2
 ```
 
@@ -317,12 +326,14 @@ php artisan serve
 
 | Tool        | Status |
 | ----------- | ------ |
-| PHP 8.5     | ✅     |
+| PHP 8.4     | ✅     |
 | Composer    | ✅     |
 | Laravel CLI | ✅     |
 | MySQL 8.4   | ✅     |
 | Redis       | ✅     |
 | Node 24     | ✅     |
+| NPM         | ✅     |
+| Yarn        | ✅     |
 | Bun         | ✅     |
 | Apache      | ✅     |
 
