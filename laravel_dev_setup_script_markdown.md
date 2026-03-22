@@ -204,6 +204,10 @@ FLUSH PRIVILEGES;
 EXIT;
 ```
 
+```bash
+mysql -u root
+```
+
 ---
 
 # 8️⃣ Install Redis (Latest Official Repo)
