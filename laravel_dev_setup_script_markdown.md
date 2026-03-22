@@ -133,9 +133,6 @@ Avoid system Node conflicts and manage versions cleanly.
 
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
-```
-
-```bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 ```
@@ -174,14 +171,9 @@ Latest stable MySQL with long-term support.
 
 ```bash
 wget https://dev.mysql.com/get/mysql-apt-config_0.8.36-1_all.deb
-```
-
-```bash
 echo "mysql-apt-config mysql-apt-config/select-server select mysql-8.4-lts" | sudo debconf-set-selections
 sudo dpkg -i mysql-apt-config_0.8.36-1_all.deb
-```
-
-```bash
+sudo rm mysql-apt-config_0.8.36-1_all.deb
 sudo apt update
 sudo apt install -y mysql-server mysql-client
 ```
@@ -218,13 +210,7 @@ Ubuntu repo Redis is outdated.
 
 ```bash
 curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
-```
-
-```bash
 echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
-```
-
-```bash
 sudo apt update
 sudo apt install -y redis
 ```
@@ -256,9 +242,6 @@ Apache acts as web server, PHP handled via FPM.
 
 ```bash
 sudo apt install -y apache2
-```
-
-```bash
 sudo a2enmod rewrite proxy_fcgi setenvif headers
 sudo a2enconf php8.4-fpm
 sudo systemctl restart apache2
@@ -299,15 +282,23 @@ $cfg['Servers'][1]['AllowNoPassword'] = true;
 
 ```bash
 curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
-```
-
-```bash
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list
-```
-
-```bash
 sudo apt update
 sudo apt install -y gh
+```
+
+---
+
+# 1️⃣2️⃣ Bash History clear
+
+```bash
+nano ~/.bashrc
+```
+
+```bash
+export HISTFILE=~/.bash_history
+export HISTSIZE=10000
+export HISTFILESIZE=0
 ```
 
 ---
