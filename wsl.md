@@ -81,21 +81,22 @@ sudo systemctl enable --now php8.5-fpm
 ### Configure php.ini for Development
 
 ```bash
-PHP_INI=$(php --ini | grep "Loaded Configuration" | awk '{print $NF}')
-
-sudo sed -i \
-  -e 's/^memory_limit.*/memory_limit = 1024M/' \
-  -e 's/^upload_max_filesize.*/upload_max_filesize = 5120M/' \
-  -e 's/^post_max_size.*/post_max_size = 5120M/' \
-  -e 's/^max_input_vars.*/max_input_vars = 3000/' \
-  -e 's/^;date.timezone.*/date.timezone = Asia\/Dhaka/' \
-  -e 's/^date.timezone.*/date.timezone = Asia\/Dhaka/' \
-  -e 's/^display_errors.*/display_errors = On/' \
-  -e 's/^max_file_uploads.*/max_file_uploads = 100/' \
-  -e 's/^realpath_cache_size.*/realpath_cache_size = 16M/' \
-  "$PHP_INI"
+for PHP_INI in /etc/php/8.5/cli/php.ini /etc/php/8.5/fpm/php.ini; do
+  [ -f "$PHP_INI" ] || continue
+  sudo sed -i \
+    -e '/^;*\s*memory_limit/c\memory_limit = 1024M' \
+    -e '/^;*\s*upload_max_filesize/c\upload_max_filesize = 5120M' \
+    -e '/^;*\s*post_max_size/c\post_max_size = 5120M' \
+    -e '/^;*\s*max_input_vars/c\max_input_vars = 3000' \
+    -e '/^;*\s*date\.timezone/c\date.timezone = Asia/Dhaka' \
+    -e '/^;*\s*display_errors/c\display_errors = On' \
+    -e '/^;*\s*max_file_uploads/c\max_file_uploads = 100' \
+    -e '/^;*\s*realpath_cache_size/c\realpath_cache_size = 16M' \
+    "$PHP_INI" && echo "Updated: $PHP_INI"
+done
 
 sudo systemctl restart php8.5-fpm
+php -i | grep -E "memory_limit|upload_max_filesize|post_max_size|date.timezone|display_errors"
 ```
 
 #### php.ini Recommended Values
