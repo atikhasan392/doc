@@ -159,48 +159,60 @@ source ~/.bashrc
 ```
 
 ---
-
+ 
 ## Step 7 — MySQL 8.4 LTS
-
+ 
 ```bash
 # Download the official MySQL APT config package
 wget https://dev.mysql.com/get/mysql-apt-config_0.8.36-1_all.deb
-
+ 
 # Pre-select MySQL 8.4 LTS before running the config package
 echo "mysql-apt-config mysql-apt-config/select-server select mysql-8.4-lts" \
   | sudo debconf-set-selections
-
+ 
 # Register MySQL APT repository
 sudo dpkg -i mysql-apt-config_0.8.36-1_all.deb
 rm mysql-apt-config_0.8.36-1_all.deb
 sudo apt update
-
+ 
 # Install MySQL server and client
 sudo apt install -y mysql-server mysql-client
-
+ 
 # Enable and start MySQL
 sudo systemctl enable --now mysql
 ```
-
+ 
 ### Configure Passwordless Root Access (Dev Only)
-
+ 
+MySQL 8.4 ships with `mysql_native_password` **disabled** by default.
+It must be explicitly enabled before switching root to use it.
+ 
 ```bash
-# Connect using the temporary auth socket
+# Enable the mysql_native_password plugin in MySQL config
+echo -e "\n# Enable legacy auth plugin required for passwordless root access\nmysql_native_password=ON" \
+  | sudo tee -a /etc/mysql/mysql.conf.d/mysqld.cnf
+ 
+# Restart MySQL to apply the config change
+sudo systemctl restart mysql
+```
+ 
+```bash
+# Connect as root via the Unix socket (no password required at this stage)
 sudo mysql
 ```
-
+ 
 ```sql
 -- Switch root to native password auth with an empty password
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '';
 FLUSH PRIVILEGES;
 EXIT;
 ```
-
+ 
 ```bash
 # Confirm you can now connect without any password prompt
 mysql -u root
 ```
-
+ 
 ---
 
 ## Step 8 — Redis
