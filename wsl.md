@@ -11,7 +11,7 @@
 
 | Tool         | Version   | Purpose                           |
 | ------------ | --------- | --------------------------------- |
-| Ubuntu 26.04 | 26.04     | Windows Subsystem for Linux       |
+| Ubuntu 26.04 | 26.04 LTS | Windows Subsystem for Linux       |
 | PHP          | 8.5 (FPM) | Runtime                           |
 | Composer     | Latest    | PHP dependency manager            |
 | Laravel CLI  | Latest    | Project scaffolding               |
