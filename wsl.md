@@ -1,6 +1,6 @@
 # Laravel Development Environment Setup
 
-### Ubuntu 24.04 / WSL2 — Local Only
+### Ubuntu 26.04 / WSL2 — Local Only
 
 > **⚠️ Warning:** This guide is strictly for **local development** environments.
 > Do **not** apply this configuration to production servers.
@@ -9,37 +9,38 @@
 
 ## Stack Overview
 
-| Tool        | Version   | Purpose                           |
-| ----------- | --------- | --------------------------------- |
-| PHP         | 8.5 (FPM) | Runtime                           |
-| Composer    | Latest    | PHP dependency manager            |
-| Laravel CLI | Latest    | Project scaffolding               |
-| MySQL       | 8.4 LTS   | Primary database                  |
-| Redis       | Latest    | Cache / queue driver              |
-| Node.js     | 24 (NVM)  | Frontend tooling                  |
-| Bun         | Latest    | Fast JS runtime & package manager |
-| Apache      | 2.4       | Web server (PHP-FPM proxy)        |
-| phpMyAdmin  | Latest    | DB GUI (auto-login, dev only)     |
-| GitHub CLI  | Latest    | Git + GitHub integration          |
+| Tool         | Version   | Purpose                           |
+| ------------ | --------- | --------------------------------- |
+| Ubuntu 26.04 | 26.04     | Windows Subsystem for Linux       |
+| PHP          | 8.5 (FPM) | Runtime                           |
+| Composer     | Latest    | PHP dependency manager            |
+| Laravel CLI  | Latest    | Project scaffolding               |
+| MySQL        | 8.4 LTS   | Primary database                  |
+| Redis        | Latest    | Cache / queue driver              |
+| Node.js      | 24 (NVM)  | Frontend tooling                  |
+| Bun          | Latest    | Fast JS runtime & package manager |
+| Apache       | 2.4       | Web server (PHP-FPM proxy)        |
+| phpMyAdmin   | Latest    | DB GUI (auto-login, dev only)     |
+| GitHub CLI   | Latest    | Git + GitHub integration          |
 
 ---
 
 ## Prerequisites
 
-- Fresh **Ubuntu 24.04** or **WSL2** instance
+- Fresh **Ubuntu 26.04** or **WSL2** instance
 - `sudo` access
 - Replace `<YOUR_USERNAME>` with your actual Linux username wherever it appears
 
 ---
 
-## Step 0 — Enable WSL2 & Install Ubuntu 24.04
+## Step 0 — Enable WSL2 & Install Ubuntu 26.04
 
 Run the following from **PowerShell (Windows)** — skip if already on native Ubuntu.
 
 ```bash
 wsl --install
 wsl --list --online
-wsl --install -d Ubuntu-24.04
+wsl --install -d Ubuntu-26.04
 ```
 
 <!-- wsl --unregister Ubuntu-24.04 -->
