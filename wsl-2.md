@@ -17,7 +17,7 @@
 | ------------------ | ---------------------------- | -------------------------------------------------- |
 | WSL 2              | Latest stable                | Linux virtualization layer for Windows development |
 | Ubuntu             | Current LTS / target release | Linux development environment                      |
-| PHP                | 8.5 NTS, FPM + CLI           | Laravel backend runtime                            |
+| PHP                | 8.4 NTS, FPM + CLI           | Laravel backend runtime                            |
 | Composer           | Latest stable                | PHP dependency manager                             |
 | Laravel Installer  | Latest stable                | Laravel project scaffolding                        |
 | MySQL              | 8.4 LTS                      | Relational database                                |
@@ -86,25 +86,25 @@ sudo apt install -y \
 
 ---
 
-## Step 2 — Install PHP 8.5 NTS
+## Step 2 — Install PHP 8.4 NTS
 
 ```bash
 sudo apt update
 
 sudo apt install -y \
-  php8.5 php8.5-fpm php8.5-cli \
-  php8.5-common \
-  php8.5-bcmath php8.5-curl php8.5-xml php8.5-gd \
-  php8.5-mbstring php8.5-mysql php8.5-zip \
-  php8.5-intl php8.5-readline \
-  php8.5-redis php8.5-msgpack php8.5-igbinary \
-  php8.5-sqlite3 php8.5-pgsql
+  php8.4 php8.4-fpm php8.4-cli \
+  php8.4-common \
+  php8.4-bcmath php8.4-curl php8.4-xml php8.4-gd \
+  php8.4-mbstring php8.4-mysql php8.4-zip \
+  php8.4-intl php8.4-readline \
+  php8.4-redis php8.4-msgpack php8.4-igbinary \
+  php8.4-sqlite3 php8.4-pgsql
 
 php -v
 php -m | grep -E "Zend OPcache|bcmath|curl|gd|intl|mbstring|mysqli|mysqlnd|pdo_mysql|redis|zip"
 
-sudo systemctl enable --now php8.5-fpm
-systemctl status php8.5-fpm --no-pager
+sudo systemctl enable --now php8.4-fpm
+systemctl status php8.4-fpm --no-pager
 ```
 
 ---
@@ -112,7 +112,7 @@ systemctl status php8.5-fpm --no-pager
 ## Step 3 — Configure PHP for Local Development
 
 ```bash
-PHP_VERSION="8.5"
+PHP_VERSION="8.4"
 
 for PHP_INI in /etc/php/${PHP_VERSION}/cli/php.ini /etc/php/${PHP_VERSION}/fpm/php.ini; do
   [ -f "$PHP_INI" ] || continue
@@ -143,7 +143,7 @@ done
 ### Configure OPcache
 
 ```bash
-PHP_VERSION="8.5"
+PHP_VERSION="8.4"
 
 for OPCACHE_INI in /etc/php/${PHP_VERSION}/cli/conf.d/10-opcache.ini /etc/php/${PHP_VERSION}/fpm/conf.d/10-opcache.ini; do
   [ -f "$OPCACHE_INI" ] || continue
@@ -375,7 +375,7 @@ Apache works as the HTTP front end. PHP requests are passed to PHP-FPM.
 sudo apt install -y apache2
 
 sudo a2enmod rewrite proxy_fcgi setenvif headers
-sudo a2enconf php8.5-fpm
+sudo a2enconf php8.4-fpm
 
 sudo systemctl restart apache2
 systemctl status apache2 --no-pager
@@ -478,7 +478,7 @@ Expected results:
 
 | Tool              | Expected status             |
 | ----------------- | --------------------------- |
-| PHP 8.5           | Installed                   |
+| PHP 8.4           | Installed                   |
 | PHP-FPM           | Active                      |
 | Composer          | Installed                   |
 | Laravel Installer | Installed                   |
@@ -525,7 +525,7 @@ bun upgrade
 ### Check running services
 
 ```bash
-systemctl status php8.5-fpm --no-pager
+systemctl status php8.4-fpm --no-pager
 systemctl status mysql --no-pager
 systemctl status redis-server --no-pager
 systemctl status apache2 --no-pager
