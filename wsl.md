@@ -250,10 +250,14 @@ nvm install 24
 nvm use 24
 nvm alias default 24
 
+corepack enable
+
 node -v
 npm -v
+yarn -v
+pnpm -v
 
-npm install -g npm yarn npm-check-updates
+npm install -g npm npm-check-updates
 ```
 
 ---
