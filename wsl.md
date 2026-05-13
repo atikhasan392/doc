@@ -62,10 +62,10 @@ sudo apt install -y \
 
 ## Step 2 — PHP 8.5
 
-Ubuntu's default PHP is outdated. The Ondřej PPA provides the latest stable release.
-
 ```bash
-sudo add-apt-repository ppa:ondrej/php -y
+sudo apt install php-cli
+sudo apt install php8.5-cli
+sudo apt install php-fpm
 sudo apt update
 
 sudo apt install -y \
