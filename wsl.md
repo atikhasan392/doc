@@ -422,7 +422,15 @@ git config --global user.email "<YOUR_GIT_EMAIL>"
 
 ---
 
-## Step 13 — Configure Shell History
+## Step 13 — Install Visual Studio Code CLI
+
+```bash
+code .
+```
+
+---
+
+## Step 14 — Configure Shell History
 
 ```bash
 cat >> ~/.bashrc <<'EOF'
@@ -438,7 +446,7 @@ source ~/.bashrc
 
 ---
 
-## Step 14 — Final Verification Checklist
+## Step 15 — Final Verification Checklist
 
 Run these commands after installation:
 
@@ -476,7 +484,7 @@ Expected results:
 
 ---
 
-## Step 15 — Maintenance Notes
+## Maintenance Notes
 
 ### Update system packages
 
