@@ -43,7 +43,7 @@ wsl --list --online
 wsl --install -d Ubuntu-26.04
 ```
 
-<!-- wsl --unregister Ubuntu-24.04 -->
+<!-- wsl --unregister Ubuntu-26.04 -->
 
 ---
 
@@ -55,7 +55,7 @@ sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
 sudo apt install -y \
   curl wget gnupg ca-certificates lsb-release \
   apt-transport-https software-properties-common \
-  unzip git build-essential
+  zip unzip git build-essential
 ```
 
 ---
