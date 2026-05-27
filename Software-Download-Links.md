@@ -13,12 +13,10 @@
 ## 💻 Development Tools
 - [Visual Studio Code](https://code.visualstudio.com/)
 - [Notepad++](https://notepad-plus-plus.org/)
-- [Node.js](https://nodejs.org/en)
-- [PHP](https://www.php.net/)
-- [Composer](https://getcomposer.org/)
 - [Postman](https://www.postman.com/downloads/)
 - [Git](https://git-scm.com/)
 - [JetBrains Mono](https://www.jetbrains.com/lp/mono/)
+- [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install)
 
 ## 🖌️ Design and Video Tools
 - [Canva (Windows App)](https://www.canva.com/download/windows/)
