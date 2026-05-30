@@ -264,8 +264,10 @@ npm install -g npm npm-check-updates
 
 ## Step 7 — Install MySQL 8.4 LTS
 
+MySQL Community Downloads Link - https://dev.mysql.com/downloads/repo/apt/
+
 ```bash
-wget https://dev.mysql.com/get/mysql-apt-config_0.8.36-1_all.deb
+wget https://dev.mysql.com/get/mysql-apt-config_0.8.39-1_all.deb
 
 echo "mysql-apt-config mysql-apt-config/select-server select mysql-8.4-lts" \
   | sudo debconf-set-selections
