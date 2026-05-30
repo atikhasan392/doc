@@ -272,8 +272,8 @@ wget https://dev.mysql.com/get/mysql-apt-config_0.8.39-1_all.deb
 echo "mysql-apt-config mysql-apt-config/select-server select mysql-8.4-lts" \
   | sudo debconf-set-selections
 
-sudo dpkg -i mysql-apt-config_0.8.36-1_all.deb
-rm mysql-apt-config_0.8.36-1_all.deb
+sudo dpkg -i mysql-apt-config_0.8.39-1_all.deb
+rm mysql-apt-config_0.8.39-1_all.deb
 
 sudo apt update
 sudo apt install -y mysql-server mysql-client
