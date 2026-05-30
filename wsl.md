@@ -392,11 +392,7 @@ $cfg['Servers'][1]['AllowNoPassword'] = true;
 EOF
 ```
 
-Open phpMyAdmin:
-
-```text
-http://localhost/phpmyadmin
-```
+Open phpMyAdmin: http://localhost/phpmyadmin
 
 ---
 
